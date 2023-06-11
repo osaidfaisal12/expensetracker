@@ -18,13 +18,25 @@ const Form = () => {
     setOpenForm(!openForm);
   }
 
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+  "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
   const submitHandler = (e) => {
     e.preventDefault()
-    console.log(title.current.value, amount.current.value, date.current.value, tags.current.value.split(','), paymentmethod)
-
-    if (title.current.value === '' || amount.current.value === '' || date.current.value === '' || tags.current.value === '') return alert('Please fill all the fields')
+    let newDate = new Date(date.current.value)
+    const day =  newDate.getDate()
+    const month = monthNames[newDate.getMonth()]
+    const year = newDate.getFullYear()
     
-    dispatch(addExpense({title:title.current.value, amount:amount.current.value, date:date.current.value, tags:tags.current.value.split(','), paymentmethod:paymentmethod}))
+    newDate = `${day}-${month}-${year}`
+
+    console.log(title.current.value, amount.current.value, newDate, tags.current.value.split(','), paymentmethod)
+
+    
+    if (title.current.value === '' || amount.current.value === '' || newDate === '' || tags.current.value === '') return alert('Please fill all the fields')
+    
+    dispatch(addExpense({title:title.current.value, amount:amount.current.value, date:newDate, tags:tags.current.value.split(','), paymentmethod:paymentmethod}))
 
   }
 

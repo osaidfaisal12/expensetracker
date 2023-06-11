@@ -1,8 +1,6 @@
 "use client";
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { expenselist } from "../../../../data";
-import crypto from 'crypto';
 import axios from "axios";
 
 const initialState = {
@@ -84,25 +82,28 @@ const expenseSlice = createSlice({
     //   state.filteredExpense = filteredExpense;
     },
     filterByDate: (state, action) => {
-      let filterByDate = (action.payload + 1).toString();
-
-      if (filterByDate.length < 2) {
-        filterByDate = "0" + filterByDate;
+      let tag = action.payload;
+      if (state.active === tag) {
+        state.active = '';
+        state.filteredExpense = state.expense
       }
-
-      const filteredExpense = state.expense.filter(
-        (item) => item.date.split("-")[1] === filterByDate
-      );
-
-      state.filteredExpense = filteredExpense;
+      else{
+        state.active = tag;
+        let temp = state.expense.filter((item)=> item.date.split('-')[1] === tag) 
+        state.filteredExpense = temp
+      }
     },
     filterByPaymentMethod: (state, action) => {
-      const paymentType = action.payload
-
-      const filteredExpense = state.expense.filter((item)=> item.paymentmethod === paymentType)
-
-      state.filteredExpense = filteredExpense
-
+      const tag = action.payload;
+      if (state.active === tag) {
+        state.active = '';
+        state.filteredExpense = state.expense
+      }
+      else{
+        state.active = tag;
+        let temp = state.expense.filter((item)=> item.paymentmethod === tag) 
+        state.filteredExpense = temp
+      }
     },
     totalAmountFunc: (state, action) => {
       let total = 0;

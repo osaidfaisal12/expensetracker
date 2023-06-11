@@ -21,7 +21,6 @@ const ExpenseItems = () => {
 
   useEffect(()=>{
     dispatch(getExpenseItems())
-    console.log(filteredExpense)
   },[])
 
 
@@ -34,20 +33,6 @@ const ExpenseItems = () => {
     return <p className="w-full text-center">No Expense Found</p>;
   }
 
-  // if(expense.length === 0){
-  //   return <p className="w-full text-center">No Expense Found</p>
-  // }
-
-  // if (active !== ''){
-  //   return(
-  //     <div className="flex flex-col w-full gap-4">
-  //     {filteredExpense.map((item, index) => (
-  //       <ExpenseItem key={index} item={...item} trash />
-  //     ))}    
-  //   </div>
-
-  //   )
-  // }
 
   return (
     <div className="flex flex-col w-full gap-4">

@@ -11,47 +11,39 @@ const CategoryByMonths = () => {
   const dispatch = useDispatch();
 
   const tagFilter = (tag) => {
-    if (active === tag) {
-        dispatch(filterActive(''))
-    //   setActive("");
-        dispatch(getExpenseItems())
-  } else {
-        dispatch(filterActive(tag))
-    //   setActive(tag);
+    console.log(tag, active)
       dispatch(filterByDate(tag))
-    }
-    console.log(active)
   };
 
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
     "May",
     "June",
     "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   return (
     <div className="w-[100%] flex gap-4 items-center flex-wrap">
       {months.map((tag, index) => (
         <button
-          onClick={() => tagFilter(index)}
+          onClick={() => tagFilter(months[index])}
           key={index}
           className={` flex active:bg-black rounded-xl p-2  text-sm ${
-            active === index
+            active === months[index]
               ? "bg-white text-black flex justify-center items-center font-semibold"
               : "text-white bg-slate-700"
           }`}
         >
           {tag}
-          {active === index && (
+          {active === months[index] && (
             <p className="ml-2 flex items-center justify-center rounded-full bg-black font-semibold text-white w-[20px] h-[20px] pb-1">
               x
             </p>

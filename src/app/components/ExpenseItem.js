@@ -7,14 +7,19 @@ import { deleteExpense } from '../store/features/expenseSlice';
 
 const ExpenseItem = ({item, trashHandel, trash}) => {
 
-  function getCurrentDate(){
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+  "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
 
-    let newDate = new Date()
+
+  function getCurrentDate(item){
+
+    let newDate = new Date(item)
     let date = newDate.getDate();
-    let month = newDate.getMonth() + 1;
+    let month = monthNames[newDate.getMonth()];
     let year = newDate.getFullYear();
     
-    return `${date}-${month<10?`0${month}`:`${month}`}-${year}`
+    return `${date}-${month}-${year}`
   }
 
 
@@ -22,7 +27,7 @@ const ExpenseItem = ({item, trashHandel, trash}) => {
     <div className='w-full p-4 rounded-lg bg-slate-900 items-center'>
         <div className='w-full flex justify-between items-center'>
         <div className='flex justify-center items-center gap-4'>
-            <div className='bg-white p-2 rounded-md text-black font-semibold text-[0.875rem]'>{getCurrentDate()}</div>
+            <div className='bg-white p-2 rounded-md text-black font-semibold text-[0.875rem]'>{getCurrentDate(item.date)}</div>
             <p>{item.title}</p>
         </div>
         <div className='bg-white p-2 rounded-md text-black font-semibold text-[0.875rem]'>Rs. {item.amount}</div>
