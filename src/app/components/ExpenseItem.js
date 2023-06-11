@@ -5,7 +5,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteExpense } from '../store/features/expenseSlice';
 
-const ExpenseItem = ({item, trashHandel}) => {
+const ExpenseItem = ({item, trashHandel, trash}) => {
 
   function getCurrentDate(){
 
@@ -46,9 +46,13 @@ const ExpenseItem = ({item, trashHandel}) => {
               <span className='bg-green-500 text-[0.75rem]  flex font-bold text-slate-200 rounded-md p-1'>{item.paymentmethod.toUpperCase()}</span>
             </p>
             </div>
-            <div className='flex justify-center items-center gap-2'>
-            <Image src='/trash-bin.png' width={27} height={27} alt='bin' className='cursor-pointer' onClick={trashHandel} />
-            </div>
+
+            {
+              trash ? null : <div className='flex justify-center items-center gap-2'>
+              <Image src='/trash-bin.png' width={27} height={27} alt='bin' className='cursor-pointer' onClick={trashHandel} />
+              </div>
+            }
+            
         </div>
     </div>
   )

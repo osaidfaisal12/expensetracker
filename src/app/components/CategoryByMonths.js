@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { filterActive, filterByDate, getData } from "../store/features/expenseSlice";
+import { filterActive, filterByDate, getData, getExpenseItems } from "../store/features/expenseSlice";
 
 const CategoryByMonths = () => {
 //   const [active, setActive] = React.useState("");
@@ -14,8 +14,8 @@ const CategoryByMonths = () => {
     if (active === tag) {
         dispatch(filterActive(''))
     //   setActive("");
-      dispatch(getData())
-    } else {
+        dispatch(getExpenseItems())
+  } else {
         dispatch(filterActive(tag))
     //   setActive(tag);
       dispatch(filterByDate(tag))

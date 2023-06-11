@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
-import { addExpense } from "../store/features/expenseSlice";
+import { addExpense, getExpenseItems } from "../store/features/expenseSlice";
 
 const Form = () => {
   const [openForm, setOpenForm] = React.useState(false);
@@ -25,6 +25,7 @@ const Form = () => {
     if (title.current.value === '' || amount.current.value === '' || date.current.value === '' || tags.current.value === '') return alert('Please fill all the fields')
     
     dispatch(addExpense({title:title.current.value, amount:amount.current.value, date:date.current.value, tags:tags.current.value.split(','), paymentmethod:paymentmethod}))
+
   }
 
   return (

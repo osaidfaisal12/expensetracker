@@ -3,34 +3,61 @@
 import React, { useEffect } from "react";
 import ExpenseItem from "./ExpenseItem";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteExpense, totalAmountFunc } from "../store/features/expenseSlice";
+import { deleteExpense, getExpenseItems, totalAmountFunc } from "../store/features/expenseSlice";
 
 const ExpenseItems = () => {
-  const { expense, filteredExpense, totalAmount } = useSelector((state) => state.expense);
+  const { expense, filteredExpense, totalAmount, isLoading, active } = useSelector((state) => state.expense);
   const dispatch = useDispatch()
 
   useEffect(()=>{
     dispatch(totalAmountFunc())
   },[filteredExpense, expense])
 
-  useEffect(()=>{
-    filteredExpense
-  },[filteredExpense, expense])
-
   const trashHandler = (id) => {
-    dispatch(deleteExpense(id))
-  }
+    dispatch(deleteExpense(id)).then(() => {
+      dispatch(getExpenseItems());
+    });
+  };
+
+  useEffect(()=>{
+    dispatch(getExpenseItems())
+    console.log(filteredExpense)
+  },[])
 
 
-  if (filteredExpense.length < 1) {
-    return <p className="w-full text-center">No Expenses Found.</p>;
+
+  if (isLoading === true) {
+    return <p className="w-full text-center">Loading...</p>;
   }
+
+  if (filteredExpense.length === 0) {
+    return <p className="w-full text-center">No Expense Found</p>;
+  }
+
+  // if(expense.length === 0){
+  //   return <p className="w-full text-center">No Expense Found</p>
+  // }
+
+  // if (active !== ''){
+  //   return(
+  //     <div className="flex flex-col w-full gap-4">
+  //     {filteredExpense.map((item, index) => (
+  //       <ExpenseItem key={index} item={...item} trash />
+  //     ))}    
+  //   </div>
+
+  //   )
+  // }
 
   return (
     <div className="flex flex-col w-full gap-4">
-      {filteredExpense.map((item, index) => (
+      
+      {filteredExpense.length > 0 ?
+        filteredExpense.map((item, index) => (
         <ExpenseItem key={index} item={...item} trashHandel={()=>trashHandler(item.id)} />
-      ))}
+      ))
+      : <p className="w-full text-center">No item Found</p>
+    }
 
       <div className="w-full p-4 mt-8 rounded-lg bg-slate-900 items-center">
         <div className="w-full flex justify-between items-center">
