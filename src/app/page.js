@@ -4,6 +4,7 @@ import ExpenseItems from './components/ExpenseItems'
 import Form from './components/Form'
 import Categories from './components/Categories'
 import CategoryByMonths from './components/CategoryByMonths'
+import { Toaster } from 'react-hot-toast'
 
 export default function Home() {
   return (

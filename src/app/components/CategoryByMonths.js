@@ -31,7 +31,7 @@ const CategoryByMonths = () => {
   ];
 
   return (
-    <div className="w-[100%] flex gap-4 items-center flex-wrap">
+    <div className="w-[100%] flex gap-2 items-center flex-wrap">
       {months.map((tag, index) => (
         <button
           onClick={() => tagFilter(months[index])}

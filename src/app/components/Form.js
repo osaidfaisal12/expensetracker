@@ -2,20 +2,29 @@
 
 import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
-import { addExpense, getExpenseItems } from "../store/features/expenseSlice";
+import { addExpense, getExpenseItems, monthlyBudgetFunc } from "../store/features/expenseSlice";
 
 const Form = () => {
   const [openForm, setOpenForm] = React.useState(false);
+  const [openBudget, setBudget] = React.useState(false);
+
   const title = useRef(null);
   const amount = useRef(null);
   const date = useRef(null);
   const tags = useRef(null);
+  const budget = useRef(null);
   const [paymentmethod, setPaymentmethod] = React.useState('cash')
 
   const dispatch = useDispatch()
 
   const openFormHandler = () => {
+    setBudget(false)
     setOpenForm(!openForm);
+  }
+
+  const openBudgetHandler = () => {
+    setOpenForm(false)
+    setBudget(!openBudget);
   }
 
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
@@ -36,9 +45,35 @@ const Form = () => {
     
     if (title.current.value === '' || amount.current.value === '' || newDate === '' || tags.current.value === '') return alert('Please fill all the fields')
     
-    dispatch(addExpense({title:title.current.value, amount:amount.current.value, date:newDate, tags:tags.current.value.split(','), paymentmethod:paymentmethod}))
+    const newExpense = {
+      title: title.current.value,
+      amount: amount.current.value,
+      date: newDate,
+      tags: tags.current.value.split(','),
+      paymentmethod: paymentmethod
+    }
 
+    dispatch(addExpense(newExpense)).then(() => {
+      dispatch(getExpenseItems())
+    })
+
+    title.current.value = ''
+    amount.current.value = ''
+    date.current.value = ''
+    tags.current.value = ''
+    setPaymentmethod('cash')
+    setOpenForm(false)
   }
+
+  const submitBudgetHandler = (e) => {
+    e.preventDefault()
+    if (budget.current.value === '') return alert('Please enter monthly budget')
+    if (budget.current.value < 0) return alert('Please enter a valid monthly budget')
+    dispatch(monthlyBudgetFunc(budget.current.value))
+    budget.current.value = ''
+    setBudget(false)
+  }
+
 
   return (
     <div className="flex flex-col gap-4">
@@ -46,7 +81,7 @@ const Form = () => {
         <h1 className="font-semibold">Expenses</h1>
         <div className="flex gap-4">
         
-        <button onClick={openFormHandler} className="rounded-lg border-2 hover:border-white hover:duration-200 border-blue-600 p-2">
+        <button onClick={openBudgetHandler} className="rounded-lg border-2 hover:border-white hover:duration-200 border-blue-600 p-2">
           Add Monthly Budget +{" "}
         </button>
         <button onClick={openFormHandler} className="rounded-lg border-2 hover:border-white hover:duration-200 border-blue-600 p-2">
@@ -55,8 +90,8 @@ const Form = () => {
         
         </div>
       </div>
-      {openForm &&
-        <form onSubmit={submitHandler} className="flex flex-col border-[1px] border-white/10 p-8 gap-8 rounded-lg justify-between items-center w-full">
+      {openForm ?
+        <form id="form" onSubmit={submitHandler} className="flex flex-col border-[1px] border-white/10 p-8 gap-8 rounded-lg justify-between items-center w-full">
         <div className="flex w-full gap-4 justify-between">
           <div className="flex gap-2 items-center">
             <label className="text-white w-fit" htmlFor="expense">
@@ -127,10 +162,35 @@ const Form = () => {
         </div>
 	    </div>
 
-        <button className="rounded-lg hover:text-black font-semibold w-full hover:bg-white hover:duration-200 bg-blue-600 p-2">
+        <button id="form" className="rounded-lg hover:text-black font-semibold w-full hover:bg-white hover:duration-200 bg-blue-600 p-2">
           Add Expense
         </button>
       </form>
+      : openBudget ?
+
+      <form id="budget" onSubmit={submitBudgetHandler} className="flex flex-col border-[1px] border-white/10 p-8 gap-8 rounded-lg justify-between items-center w-full">
+        <div className="flex w-full gap-4 justify-between">       
+          <div className="flex gap-2 items-center w-[70%]">
+            <label className="text-white w-fit" htmlFor="budget">
+              Budget
+            </label>
+            <input
+              type="number"
+              ref={budget}
+              className="bg-transparent rounded-md border-[1px] border-white text-white py-2 px-4 w-full"
+              id="budget"
+              placeholder="Enter budget"
+            />
+          </div>
+          <button id="budget" className="rounded-lg hover:text-black w-[30%] font-semibold  hover:bg-white hover:duration-200 bg-blue-600 p-2">
+          Add Budget
+        </button>
+        </div>
+      
+      </form>
+
+      : null
+      
       }
     </div>
   );
