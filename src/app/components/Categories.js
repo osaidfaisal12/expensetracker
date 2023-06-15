@@ -7,7 +7,7 @@ import { filterActive, filterByPaymentMethod, filterByTag, getData, getExpenseIt
 const Categories = () => {
   // const [active, setActive] = React.useState("");
 
-  const { expense, active } = useSelector((state) => state.expense);
+  const { expense, active, userID } = useSelector((state) => state.expense);
   const dispatch = useDispatch();
 
   const uniqueTags = [...new Set(expense.flatMap((element) => element.tags))];
@@ -24,6 +24,10 @@ const Categories = () => {
   // useEffect(() => {
   //   console.log(active)
   // }, [active]);
+
+  if (!userID) {
+    return <p className="w-full text-center md:text-start">No categories</p>;
+  }
 
   return (
     <div className="w-[100%] flex gap-2 items-center flex-wrap">

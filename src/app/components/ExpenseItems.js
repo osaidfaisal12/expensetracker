@@ -5,13 +5,16 @@ import ExpenseItem from "./ExpenseItem";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteExpense, getExpenseItems, getmonthlyBudgetFunc, totalAmountFunc } from "../store/features/expenseSlice";
 import { Toaster, toast } from "react-hot-toast";
+import { writeUserData } from "@/app/firebase";
 
 const ExpenseItems = () => {
-  const { expense, filteredExpense, totalAmount, isLoading, active, monthlyBudget } = useSelector((state) => state.expense);
+  const { userID, expense, filteredExpense, totalAmount, isLoading, active, monthlyBudget } = useSelector((state) => state.expense);
   const dispatch = useDispatch()
 
   useEffect(()=>{
-    dispatch(totalAmountFunc())
+    if(userID){
+      dispatch(totalAmountFunc())
+    }
   },[filteredExpense, expense])
 
   const trashHandler = (id) => {
@@ -22,22 +25,25 @@ const ExpenseItems = () => {
   };
 
   useEffect(()=>{
-    dispatch(getExpenseItems())
-    dispatch(getmonthlyBudgetFunc())
+    if(userID){
+      dispatch(getExpenseItems(userID))
+      dispatch(getmonthlyBudgetFunc(userID))
+    }
+
   },[])
 
-  console.log(monthlyBudget, totalAmount)
 
-
-
-  if (isLoading === true) {
+  if (isLoading === true && userID) {
     return <p className="w-full text-center">Loading...</p>;
   }
 
-  if (filteredExpense.length === 0) {
+  if (filteredExpense.length === 0  && userID) {
     return <p className="w-full text-center">No Expense Found</p>;
   }
 
+  if (!userID) {
+    return <p className="w-full text-center">Please Login to see your Expenses</p>;
+  }
 
   return (
     <div className="flex flex-col w-full gap-4">

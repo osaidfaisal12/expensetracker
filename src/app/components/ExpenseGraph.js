@@ -7,7 +7,7 @@ import { getExpenseItems } from '../store/features/expenseSlice'
 
 
 const ExpenseGraph = () => {  
-  const { expense } = useSelector((state) => state.expense);
+  const { expense, userID } = useSelector((state) => state.expense);
   const [graph, setGraph] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -54,7 +54,11 @@ const ExpenseGraph = () => {
 
   return (
     <div className='bg-slate-950 w-full flex justify-center items-center h-[250px] rounded-xl'>
-        <GraphItem chartData={userData} />
+        { userID ?
+          <GraphItem chartData={userData} />
+          :
+          <div className='text-white text-2xl'>login to view graph</div>
+        }
     </div>
   )
 }

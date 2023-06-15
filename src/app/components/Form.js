@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addExpense, getExpenseItems, monthlyBudgetFunc } from "../store/features/expenseSlice";
 
 const Form = () => {
@@ -16,6 +16,7 @@ const Form = () => {
   const [paymentmethod, setPaymentmethod] = React.useState('cash')
 
   const dispatch = useDispatch()
+  const { userID } = useSelector((state) => state.expense);
 
   const openFormHandler = () => {
     setBudget(false)
@@ -44,34 +45,34 @@ const Form = () => {
 
     
     if (title.current.value === '' || amount.current.value === '' || newDate === '' || tags.current.value === '') return alert('Please fill all the fields')
-    
     const newExpense = {
       title: title.current.value,
       amount: amount.current.value,
       date: newDate,
       tags: tags.current.value.split(','),
       paymentmethod: paymentmethod
-    }
+    };
+    
+    dispatch(addExpense({newExpense, userID})).then(() => {
+      dispatch(getExpenseItems(userID));
+    });
 
-    dispatch(addExpense(newExpense)).then(() => {
-      dispatch(getExpenseItems())
-    })
-
-    title.current.value = ''
-    amount.current.value = ''
-    date.current.value = ''
-    tags.current.value = ''
-    setPaymentmethod('cash')
-    setOpenForm(false)
+    // title.current.value = ''
+    // amount.current.value = ''
+    // date.current.value = ''
+    // tags.current.value = ''
+    // setPaymentmethod('cash')
+    // setOpenForm(false)
   }
 
   const submitBudgetHandler = (e) => {
     e.preventDefault()
     if (budget.current.value === '') return alert('Please enter monthly budget')
     if (budget.current.value < 0) return alert('Please enter a valid monthly budget')
-    dispatch(monthlyBudgetFunc(budget.current.value))
-    budget.current.value = ''
-    setBudget(false)
+    const monthlyBudget = budget.current.value
+    dispatch(monthlyBudgetFunc({monthlyBudget, userID}))
+    // budget.current.value = ''
+    // setBudget(false)
   }
 
 

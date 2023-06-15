@@ -1,7 +1,9 @@
 "use client";
 
+import { db } from "@/app/firebase";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { toast } from "react-hot-toast";
 
 const initialState = {
@@ -11,6 +13,7 @@ const initialState = {
   totalAmount: 0,
   monthlyBudget: 0,
   isLoading: true,
+  userID: '2otBLmM7LUZViuoJRHrhUsqGYgy1',
 };
 
 const url =
@@ -18,27 +21,57 @@ const url =
 
 export const getExpenseItems = createAsyncThunk(
   "expense/getExpenseItems",
-  async () => {
-    return await fetch(url)
-      .then((res) => res.json())
-      .catch((err) => {
-        console.log(err);
-      });
+  async (userID) => {
+
+
+    // return await fetch(`https://expensetracker-8328f-default-rtdb.firebaseio.com/Expenses/${userID}/Expenses`)
+    //   .then((res) => res.json())
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    const res = await axios.get(`https://expensetracker-8328f-default-rtdb.firebaseio.com/${userID}/Expenses.json`);
+    console.log(res.data)
+      return res.data;
+    // try {
+    //   const querySnapshot = await getDocs(collection(db, "users", userID, "Expenses"));
+  
+    //   const expenses = [];
+    //   querySnapshot.forEach((doc) => {
+    //     expenses.push({ id: doc.id, ...doc.data() });
+    //   });
+  
+    //   console.log(expenses);
+    // } catch (e) {
+    //   console.error("Error fetching expenses: ", e);
+    // }
+
   }
 );
 
 export const monthlyBudgetFunc = createAsyncThunk(
   "expense/MonthlyBudgetFun",
-  async (budget) => {
-    const res = await axios.put('https://expensetracker-8328f-default-rtdb.firebaseio.com/budget.json', budget);
+  async (state) => {
+
+    const { monthlyBudget, userID } = state;
+    const res = await axios.put(`https://expensetracker-8328f-default-rtdb.firebaseio.com/${userID}/budget.json`, monthlyBudget);
     return res.data;
+    // const { monthly, userID } = state;
+    // console.log(monthly, userID)
+    // try {
+    //   const docRef = doc(db, "users", userID);
+    //   await setDoc(docRef, {budget:monthly});
+    //   console.log("Document updated");
+    // } catch (e) {
+    //   console.error("Error updating document: ", e);
+    // }
   }
 );
 
 export const getmonthlyBudgetFunc = createAsyncThunk(
   "expense/getMonthlyBudget",
-  async () => {
-    const res = await axios.get('https://expensetracker-8328f-default-rtdb.firebaseio.com/budget.json');
+  async (userID) => {
+    const res = await axios.get(`https://expensetracker-8328f-default-rtdb.firebaseio.com/${userID}/budget.json`);
     console.log(res.data)
     return res.data;
   }
@@ -61,9 +94,25 @@ export const deleteExpense = createAsyncThunk(
   }
 );
 
-export const addExpense = createAsyncThunk('expense/addExpense', async (expense) => {
-  const res = await axios.post('https://expensetracker-8328f-default-rtdb.firebaseio.com/Expenses.json', expense)
+export const addExpense = createAsyncThunk('expense/addExpense', async (state, api) => {
+
+  const { newExpense, userID } = state
+  const res = await axios.post(`https://expensetracker-8328f-default-rtdb.firebaseio.com/${userID}/Expenses.json`, newExpense)
   return res.data
+  // const {newExpense, id} = arg
+
+  // const {newExpense, userID, id} = state
+
+  // console.log('addExpense')
+  // console.log(newExpense, userID)
+  // try{
+  //   const docRef = doc(db, "users", userID,'Expenses',id)
+  //   await setDoc(docRef, newExpense)
+  //   console.log("Document written with ID");
+  // } catch(e) {
+  //   console.error("Error adding document: ", e);
+  // }
+
 })
 
 const expenseSlice = createSlice({
@@ -155,7 +204,11 @@ const expenseSlice = createSlice({
       });
       state.totalAmount = total;
     },
-    
+    userIDFunc: (state, action) => {
+      const id = action.payload
+      state.userID = id
+      console.log(state.userID)
+    }
 
     // deleteExpense: (state, action) => {
     //   const expenseID = action.payload;
@@ -222,6 +275,7 @@ export const {
   filterByPaymentMethod,
   totalAmountFunc,
   filterActive,
+  userIDFunc,
 } = expenseSlice.actions;
 
 export default expenseSlice.reducer;
