@@ -9,7 +9,7 @@ import LoginModal from './components/LoginModal'
 
 export default function Home() {
   return (
-    <div className='w-[700px] rounded-xl flex flex-col p-4 gap-4 min-h-screen bg-slate-800'>
+    <div className='md:w-[700px] w-[380px] rounded-xl flex flex-col p-4 md:gap-4 gap-8 min-h-screen md:bg-slate-800'>
       <LoginModal />
       <ExpenseGraph />
       <Form />

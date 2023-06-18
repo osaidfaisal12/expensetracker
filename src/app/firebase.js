@@ -1,9 +1,8 @@
 'use client'
 
 import { initializeApp } from "firebase/app";
-import { FacebookAuthProvider, GithubAuthProvider, GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
-import { Firestore, collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
-import { resolve } from "styled-jsx/css";
+import { FacebookAuthProvider, GithubAuthProvider, GoogleAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaHxOrGH6nVEUGto-ycY63T-dk6e9g_WA",
@@ -24,7 +23,6 @@ const githubProvider = new GithubAuthProvider();
 
 export const signInWithGoogle = () => {
     return new Promise((resolve, reject) => {
-      const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
         .then((result) => {
           resolve(result);
@@ -51,44 +49,18 @@ export const signInWithGithub = () => {
     })
 }
 
-// const test = doc(db, 'test', 'test' )
-// export function testFunc() {
-//     const docData = {
-//         stringExample: 'Hello world!',
-//         booleanExample: true,
-//     }
-//     setDoc(test, docData)
-// }
-// testFunc()
+export const logout = () => {
+
+    return new Promise((resolve, reject) => {
+      signOut(auth)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+}
 
 export const db = getFirestore(app);
 
-// export const writeUserData = async(userID, data) => {
-//   try{
-//     const docRef = doc(db, "users", userID)
-//     await setDoc(docRef, data)
-//     console.log("Document written with ID");
-//   } catch(e) {
-//     console.error("Error adding document: ", e);
-//   }
-// }
-// const userId = 'yvqPtSw6kKVC5z6nig4BBDwdHTF2'
-// writeUserData(userId , {test: "hapi hapi"})
-
-// export const fetchExpense = async () => {
-//   try {
-//     const docRef = doc(
-//       collection(db, "users", "2otBLmM7LUZViuoJRHrhUsqGYgy1", "Expenses"),
-//       "1221"
-//     );
-//     const docSnap = await getDoc(docRef);
-//     if (docSnap.exists()) {
-//       console.log(docSnap.data());
-//     } else {
-//       console.log("Document does not exist");
-//     }
-//   } catch (e) {
-//     console.error("Error fetching document: ", e);
-//   }
-// }
-// fetchExpense()

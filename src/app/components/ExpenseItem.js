@@ -1,9 +1,7 @@
 'use client'
 
 import Image from 'next/image';
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteExpense } from '../store/features/expenseSlice';
+import React from 'react'
 
 const ExpenseItem = ({item, trashHandel, trash}) => {
 
@@ -24,7 +22,7 @@ const ExpenseItem = ({item, trashHandel, trash}) => {
 
 
   return (
-    <div className='w-full p-4 rounded-lg bg-slate-900 items-center'>
+    <div className='w-full p-4 rounded-lg bg-slate-800 md:bg-slate-900 items-center'>
         <div className='w-full flex justify-between items-center'>
         <div className='flex justify-center items-center gap-4'>
             <div className='bg-white p-2 rounded-md text-black font-semibold text-[0.875rem]'>{getCurrentDate(item.date)}</div>

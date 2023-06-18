@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-900 text-white flex justify-center py-20 items-center`}>
+      <body className={`${inter.className} bg-slate-900 text-white flex justify-center py-6 md:py-20 items-center`}>
         <Providers>
         {children}
         </Providers>

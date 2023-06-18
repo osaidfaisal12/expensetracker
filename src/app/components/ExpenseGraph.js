@@ -53,7 +53,7 @@ const ExpenseGraph = () => {
 
 
   return (
-    <div className='bg-slate-950 w-full flex justify-center items-center h-[250px] rounded-xl'>
+    <div className='md:bg-slate-950 bg-black w-full flex justify-center items-center h-[250px] rounded-xl'>
         { userID ?
           <GraphItem chartData={userData} />
           :

@@ -40,9 +40,6 @@ const Form = () => {
     const year = newDate.getFullYear()
     
     newDate = `${day}-${month}-${year}`
-
-    console.log(title.current.value, amount.current.value, newDate, tags.current.value.split(','), paymentmethod)
-
     
     if (title.current.value === '' || amount.current.value === '' || newDate === '' || tags.current.value === '') return alert('Please fill all the fields')
     const newExpense = {
@@ -57,12 +54,12 @@ const Form = () => {
       dispatch(getExpenseItems(userID));
     });
 
-    // title.current.value = ''
-    // amount.current.value = ''
-    // date.current.value = ''
-    // tags.current.value = ''
-    // setPaymentmethod('cash')
-    // setOpenForm(false)
+    title.current.value = ''
+    amount.current.value = ''
+    date.current.value = ''
+    tags.current.value = ''
+    setPaymentmethod('cash')
+    setOpenForm(false)
   }
 
   const submitBudgetHandler = (e) => {
@@ -71,14 +68,15 @@ const Form = () => {
     if (budget.current.value < 0) return alert('Please enter a valid monthly budget')
     const monthlyBudget = budget.current.value
     dispatch(monthlyBudgetFunc({monthlyBudget, userID}))
-    // budget.current.value = ''
-    // setBudget(false)
+    budget.current.value = ''
+    setBudget(false)
   }
 
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-between items-center">
+      { userID &&
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-0 items-start">
         <h1 className="font-semibold">Expenses</h1>
         <div className="flex gap-4">
         
@@ -90,10 +88,10 @@ const Form = () => {
         </button>
         
         </div>
-      </div>
+      </div>}
       {openForm ?
         <form id="form" onSubmit={submitHandler} className="flex flex-col border-[1px] border-white/10 p-8 gap-8 rounded-lg justify-between items-center w-full">
-        <div className="flex w-full gap-4 justify-between">
+        <div className="flex flex-col md:flex-row w-full gap-4 justify-between">
           <div className="flex gap-2 items-center">
             <label className="text-white w-fit" htmlFor="expense">
               Expense
@@ -122,7 +120,7 @@ const Form = () => {
           
         </div>
 
-        <div className="flex w-full gap-4 justify-between">
+        <div className="flex  flex-col md:flex-row w-full gap-4 justify-between">
           <div className="flex gap-2 items-center">
             <label className="text-white w-fit" htmlFor="date">
               Date
@@ -169,7 +167,7 @@ const Form = () => {
       </form>
       : openBudget ?
 
-      <form id="budget" onSubmit={submitBudgetHandler} className="flex flex-col border-[1px] border-white/10 p-8 gap-8 rounded-lg justify-between items-center w-full">
+      <form id="budget" onSubmit={submitBudgetHandler} className="flex flex-col border-[1px] border-white/10 md:p-8 p-4 gap-8  rounded-lg justify-between items-center w-full">
         <div className="flex w-full gap-4 justify-between">       
           <div className="flex gap-2 items-center w-[70%]">
             <label className="text-white w-fit" htmlFor="budget">
