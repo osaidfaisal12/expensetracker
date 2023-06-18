@@ -7,10 +7,11 @@ import CategoryByMonths from './components/CategoryByMonths'
 import { Toaster } from 'react-hot-toast'
 import LoginModal from './components/LoginModal'
 
-export default function Home() {
+export default async function Home() {
+
   return (
     <div className='md:w-[700px] w-[380px] rounded-xl flex flex-col p-4 md:gap-4 gap-8 min-h-screen md:bg-slate-800'>
-      <LoginModal />
+      <LoginModal/>
       <ExpenseGraph />
       <Form />
       <Categories />

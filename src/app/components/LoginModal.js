@@ -35,7 +35,7 @@ const LoginModal = () => {
         logout().then(() => {
             alert('Logged Out')
             dispatch(logOutFunc())
-            router.reload()
+            router.refresh()
         }).catch((error) => {
             alert(error.message);
         });
